@@ -11,26 +11,36 @@ data:
       providers:
         - type: kubernetes
           hints.enabled: true
-
+        - type: docker
+          templates:
+            - condition:
+                contains:
+                  docker.container.image: elasticsearch
+              config:
+                - module: elasticsearch
+                  server:
+                    input:
+                      type: docker
+                      containers.ids:
+                        - "${data.docker.container.id}"
+                  slowlog:
+                    input:
+                      type: docker
+                      containers.ids:
+                        - "${data.docker.container.id}"
+                  # TODO: add gc, audit, slowlog, deprecation fileset
+            - condition:
+                contains:
+                  docker.container.image: kibana
+              config:
+                - module: kibana
+                  log:
+                    input:
+                      type: docker
+                      containers.ids:
+                        - "${data.docker.container.id}"
     processors:
       - add_cloud_metadata:
-
-    filebeat.modules:
-    - module: elasticsearch
-      server:
-        enabled: true
-      gc:
-        enabled: true
-      audit:
-        enabled: true
-      slowlog:
-        enabled: true
-      deprecation:
-        enabled: true
-
-    - module: kibana
-      log:
-        enabled: true
 
     output.elasticsearch:
       hosts: ['elasticsearch:9200']
