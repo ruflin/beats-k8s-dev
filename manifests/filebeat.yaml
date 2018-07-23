@@ -15,6 +15,23 @@ data:
     processors:
       - add_cloud_metadata:
 
+    filebeat.modules:
+    - module: elasticsearch
+      server:
+        enabled: true
+      gc:
+        enabled: true
+      audit:
+        enabled: true
+      slowlog:
+        enabled: true
+      deprecation:
+        enabled: true
+
+    - module: kibana
+      log:
+        enabled: true
+
     output.elasticsearch:
       hosts: ['elasticsearch:9200']
 
@@ -46,7 +63,7 @@ spec:
             - until nslookup kibana; do echo Waiting for kibana; sleep 1; done
       containers:
       - name: filebeat
-        image: docker.elastic.co/beats/filebeat:6.3.0
+        image: ruflin/fb-snapshot
         imagePullPolicy: Always
         args: [
           "-c", "/etc/filebeat.yml",

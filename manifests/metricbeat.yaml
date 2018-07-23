@@ -55,6 +55,14 @@ data:
       period: 10s
       hosts: ["kube-state-metrics:8080"]
 
+    - module: elasticsearch
+      period: 10s
+      hosts: ["elasticsearch:9200"]
+
+    - module: kibana
+      period: 10s
+      hosts: ["kibana:9200"]
+
     processors:
       - add_cloud_metadata:
 
@@ -81,18 +89,11 @@ spec:
         k8s-app: metricbeat
     spec:
       serviceAccountName: metricbeat
-      initContainers:
-        - name: wait-kibana
-          image: busybox
-          command:
-            - sh
-            - -c
-            - until wget -q localhost:5601; do echo Waiting for kibana; sleep 1; done
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: metricbeat
-        image: docker.elastic.co/beats/metricbeat:6.3.0
+        image: ruflin/mb-snapshot
         args: [
           "-c", "/etc/metricbeat.yml",
           "-e",

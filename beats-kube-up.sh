@@ -4,7 +4,7 @@ set -e
 K8S_VERSION="v1.10.0"
 MINIKUBE_VERSION="v0.28.0"
 MEMORY_MB="8192"
-BIN=./bin
+BIN=/usr/local/bin
 
 case $(uname -s) in
    Darwin) OS=darwin ;;
@@ -47,23 +47,23 @@ echo ""
 
 echo "Deploying services..."
 echo "kube-sate-metrics..."
-$BIN/kubectl create -f manifests/kube-state-metrics.yaml
+$BIN/kubectl apply -f manifests/kube-state-metrics.yaml
 echo ""
 
 echo "elasticsearch..."
-$BIN/kubectl create -f manifests/elasticsearch.yaml
+$BIN/kubectl apply -f manifests/elasticsearch.yaml
 echo ""
 
 echo "kibana..."
-$BIN/kubectl create -f manifests/kibana.yaml
+$BIN/kubectl apply -f manifests/kibana.yaml
 echo ""
 
 echo "filebeat..."
-$BIN/kubectl create -f manifests/filebeat.yaml
+$BIN/kubectl apply -f manifests/filebeat.yaml
 echo ""
 
 echo "metricbeat..."
-$BIN/kubectl create -f manifests/metricbeat.yaml
+$BIN/kubectl apply -f manifests/metricbeat.yaml
 echo ""
 
 echo "Cluster is ready. Once deployments are done you can access:"
