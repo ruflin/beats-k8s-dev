@@ -9,8 +9,8 @@ data:
   filebeat.yml: |-
     filebeat.autodiscover:
       providers:
-        - type: kubernetes
-          hints.enabled: true
+        #- type: kubernetes
+        #  hints.enabled: true
         - type: docker
           templates:
             - condition:
@@ -23,11 +23,11 @@ data:
                       type: docker
                       containers.ids:
                         - "${data.docker.container.id}"
-                  slowlog:
-                    input:
-                      type: docker
-                      containers.ids:
-                        - "${data.docker.container.id}"
+                  #slowlog:
+                  #  input:
+                  #    type: docker
+                  #    containers.ids:
+                  #      - "${data.docker.container.id}"
                   # TODO: add gc, audit, slowlog, deprecation fileset
             - condition:
                 contains:
